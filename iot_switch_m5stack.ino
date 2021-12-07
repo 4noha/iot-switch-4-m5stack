@@ -1,4 +1,4 @@
-#include <M5Stack.h>
+#include <Arduino.h>
 #include <WiFi.h>
 #include <WiFiClientSecure.h>
 #include <HTTPClient.h>
@@ -42,14 +42,8 @@ void requestCommands(int count, String *deviceIds, String *commands) {
 }
 
 void setup() {
-  M5.begin();
-  M5.Lcd.setTextColor(BLACK);
-  M5.Lcd.setTextSize(8);
-  M5.Lcd.fillScreen(WHITE);
 
   if(mode == 1) {
-    M5.Lcd.setCursor(120, 100);
-    M5.Lcd.print("ON");
     connectWifi();
     /* Exsample
     String deviceIds[2] = { AIRCON, AIRCON };
@@ -71,8 +65,7 @@ void setup() {
   }
   mode++;
   
-  pinMode(GPIO_NUM_38, INPUT_PULLUP);
-  esp_sleep_enable_ext0_wakeup(GPIO_NUM_38, LOW);
+  esp_deep_sleep_enable_gpio_wakeup(1 << 3, ESP_GPIO_WAKEUP_GPIO_LOW);
   esp_deep_sleep_start();
 }
 
